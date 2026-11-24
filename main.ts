@@ -11,13 +11,22 @@ const LETTER = "A"; // A = coffee, B = tea. Chosen via Grok (grok-4.3):
 
 function validate(letter: string): void {
   if (letter.length !== 1) {
-    throw new Error(`entry must be exactly 1 character, got ${letter.length}`);
+    throw new Error(
+      `invalid entry: must be exactly 1 character, got ${letter.length} (${JSON.stringify(letter)})`,
+    );
+  }
+  if (Buffer.byteLength(letter, "utf8") !== 1) {
+    throw new Error(
+      `invalid entry: must be exactly 1 byte, got ${Buffer.byteLength(letter, "utf8")} bytes`,
+    );
   }
   if (letter !== "A" && letter !== "B") {
-    throw new Error(`entry must be "A" or "B", got ${JSON.stringify(letter)}`);
+    throw new Error(
+      `invalid entry: must be "A" (coffee) or "B" (tea), got ${JSON.stringify(letter)}`,
+    );
   }
-  if (letter.trim() !== letter || /\s/.test(letter)) {
-    throw new Error("entry must not contain whitespace");
+  if (/\s/.test(letter)) {
+    throw new Error("invalid entry: must not contain whitespace");
   }
 }
 
